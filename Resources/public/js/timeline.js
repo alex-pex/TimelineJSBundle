@@ -7365,16 +7365,53 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		this.iframeLoaded = function() {
 			trace("iframeLoaded");
 		};
-		
-		this.reload = function(_d) {
-			trace("Load new timeline data" + _d);
-			VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
-			data = {};
-			VMM.Timeline.DataObj.getData(_d);
-			config.current_slide = 0;
-			slider.setSlide(0);
-			timenav.setMarker(0, config.ease,config.duration);
-		};
+        
+        this.reset = function() {
+            config.current_slide = 0;
+            slider.setSlide(0);
+            timenav.setMarker(0, config.ease,config.duration);
+        };
+
+        this.reload = function(_d, _c) {
+            trace("Load new timeline data" + _d);
+
+            // show "loading timeline" message
+            VMM.fireEvent(global, config.events.messege, config.language.messages.loading_timeline);
+
+            // reset config
+            _c = _c || {};
+            if( typeof( jQuery ) != 'undefined' ) {
+                var previous_config = jQuery.extend(true, {}, config);
+                jQuery.extend(true, config, {
+                    start_at_slide: 0,
+                    current_slide:  0,
+                    duration:       0
+                });
+            }
+
+            // load data (start at first slide to prevent bugs)
+            slider.setSlide(0);
+            timenav.setMarker(0, config.ease,config.duration);
+            data = {};
+            VMM.Timeline.DataObj.getData(_d);
+
+            // restore current slide
+            config.current_slide = _c.current_slide || previous_config.current_slide;
+
+            // set active slide based on given config
+            if (config.current_slide) {
+                slider.setSlide(config.current_slide);
+                timenav.setMarker(config.current_slide, config.ease,config.duration);
+            }
+
+            // restore config
+            if( typeof( jQuery ) != 'undefined' ) {
+                jQuery.extend(true, config, {
+                    start_at_slide: previous_config.start_at_slide,
+                    duration:       previous_config.duration
+                }, _c);
+            }
+        };
 		
 		/* DATA 
 		================================================== */
@@ -8544,7 +8581,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				in_view = {
 					left:			timenav_pos.visible.left - in_view_margin,
 					right:			timenav_pos.visible.right + in_view_margin
-				}
+				},
 				not_too_many		= true,
 				i					= 0;
 			
@@ -9043,6 +9080,11 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				interval_major				=		interval_calc.month;
 				interval_macro				=		interval_calc.hour;
 			}
+
+			// force "days" interval
+			interval					=		interval_calc.day;
+			interval_major				=		interval_calc.month;
+			interval_macro				=		interval_calc.hour;
 			
 			trace("INTERVAL TYPE: " + interval.type);
 			trace("INTERVAL MAJOR TYPE: " + interval_major.type);
