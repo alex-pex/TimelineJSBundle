@@ -5790,7 +5790,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 			
 			VMM.bindEvent(".nav-next", onNextClick);
 			VMM.bindEvent(".nav-previous", onPrevClick);
-			VMM.bindEvent(window, onKeypressNav, 'keydown');
+			//VMM.bindEvent(window, onKeypressNav, 'keydown');
 			
 		}
 		
@@ -8388,7 +8388,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				i						= 0,
 				k						= 0;
 				
-			config.nav.minor_width = config.width;
+			config.nav.minor_width = 0;
 			
 			VMM.Lib.removeClass(".flag", "row1");
 			VMM.Lib.removeClass(".flag", "row2");
@@ -8506,12 +8506,12 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 					
 				}
 				
-				if (pos > config.nav.minor_width) {
-					config.nav.minor_width = pos;
+				if (pos.end > config.nav.minor_width) {
+					config.nav.minor_width = pos.end;
 				}
 				
-				if (pos < config.nav.minor_left) {
-					config.nav.minor_left = pos;
+				if (pos.begin < config.nav.minor_left) {
+					config.nav.minor_left = pos.begin;
 				}
 				
 			}
@@ -8703,7 +8703,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			}
 			
 			config.nav.constraint.right_min = -(config.nav.minor_width)+(config.width);
-			config.nav.constraint.right = config.nav.constraint.right_min + (config.width/2);
+			config.nav.constraint.right = config.nav.constraint.right_min - (config.width/2);
 			
 			VMM.Lib.css($timeintervalminor_minor, "left", config.nav.minor_left - (config.width)/2);
 			VMM.Lib.width($timeintervalminor_minor, (config.nav.minor_width)+(config.width) + Math.abs(config.nav.minor_left) );
