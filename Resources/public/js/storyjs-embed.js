@@ -1,3 +1,16 @@
+/*!
+	StoryJS
+	Designed and built by Zach Wise at VéritéCo
+
+	This Source Code Form is subject to the terms of the Mozilla Public
+	License, v. 2.0. If a copy of the MPL was not distributed with this
+	file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+/* **********************************************
+     Begin LazyLoad.js
+********************************************** */
+
 /*jslint browser: true, eqeqeq: true, bitwise: true, newcap: true, immed: true, regexp: false */
 
 /*
@@ -397,7 +410,7 @@ LazyLoad = (function (doc) {
 
 /*
 	LoadLib
-	Designed and built by Zach Wise http://zachwise.com/
+	Designed and built by Zach Wise digitalartwork.net
 	Extends LazyLoad
 */
 
@@ -451,12 +464,15 @@ LoadLib = (function (doc) {
      Begin Embed.js
 ********************************************** */
 
-//StoryJS Embed Loader
-// Provide a bootstrap method for instantiating a timeline. On page load, check the definition of these window scoped variables in this order: [url_config, timeline_config, storyjs_config, config]. As soon as one of these is found to be defined with type 'object,' it will be used to automatically instantiate a timeline.
+/**
+	VéritéCo StoryJS Embed Loader 2.2
+	Designed and built by Zach Wise digitalartwork.net
+*/  
 
 /* 	CodeKit Import
 	http://incident57.com/codekit/ 
 ================================================== */
+// @codekit-prepend "../VMM.StoryJS.License.js";
 // @codekit-prepend "Embed.LoadLib.js";
 
 var WebFontConfig;
@@ -504,7 +520,7 @@ function createStoryJS(c, src) {
 	================================================== */
 	var storyjs_embedjs, t, te, x,
 		isCDN					= false,
-		js_version				= "2.24",
+		js_version				= "2.17",
 		jquery_version_required	= "1.7.1",
 		jquery_version			= "",
 		ready = {
@@ -526,11 +542,11 @@ function createStoryJS(c, src) {
 			css:		embed_path + "css/",
 			js:			embed_path + "js/",
 			locale:		embed_path + "js/locale/",
-			jquery:		"//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js",
+			jquery:		"http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js",
 			font: {
 				google:	false,
 				css:	embed_path + "css/themes/font/",
-				js:		"//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"
+				js:		"http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"
 			}
 		},
 		storyjs_e_config = {
@@ -547,7 +563,7 @@ function createStoryJS(c, src) {
 			lang:		'en',
 			font:		'default',
 			css:		path.css + 'timeline.css?'+js_version,
-			js:			'',
+			js:			path.js + 'timeline-min.js?'+js_version,
 			api_keys: {
 				google:				"",
 				flickr:				"",
@@ -616,15 +632,7 @@ function createStoryJS(c, src) {
 		
 	} else {
 		storyjs_e_config.css	= path.css + storyjs_e_config.type + ".css?" + js_version;
-		
-		// Use unminified js file if in debug mode
-		storyjs_e_config.js		= path.js  + storyjs_e_config.type;
-		if (storyjs_e_config.debug) {
-			storyjs_e_config.js	+= ".js?"  + js_version;
-		} else {
-			storyjs_e_config.js	+= "-min.js?"  + js_version;
-		}
-		
+		storyjs_e_config.js		= path.js  + storyjs_e_config.type + "-min.js?"  + js_version;
 		storyjs_e_config.id		= "storyjs-" + storyjs_e_config.type;
 	}
 	
@@ -777,16 +785,12 @@ function createStoryJS(c, src) {
 			te.style.width = (storyjs_e_config.width) + 'px';
 		}
 		
-		if (storyjs_e_config.height.toString().match("%")) {
+		if (storyjs_e_config.height.toString().match("%") ) {
 			te.style.height = storyjs_e_config.height;
 			embed_classname	+= " full-embed";
 			te.style.height = storyjs_e_config.height.split("%")[0] + "%";
 			
-		} else if (storyjs_e_config.width.toString().match("%")) {
-			embed_classname	+= " full-embed";
-			storyjs_e_config.height = storyjs_e_config.height - 16;
-			te.style.height = (storyjs_e_config.height) + 'px';
-		}else {
+		} else {
 			embed_classname	+= " sized-embed";
 			storyjs_e_config.height = storyjs_e_config.height - 16;
 			te.style.height = (storyjs_e_config.height) + 'px';
