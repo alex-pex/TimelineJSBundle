@@ -4837,11 +4837,13 @@ if(typeof VMM != 'undefined' && typeof VMM.DragSlider == 'undefined') {
 					if (drag_info.time > 5000) {
 						drag_info.time = 5000;
 					}
+					VMM.fireEvent(elem, "DRAGCONSTRAINT", ['left']);
 				} else if (drag_info.left < drag.constraint.right) {
 					drag_info.left = drag.constraint.right;
 					if (drag_info.time > 5000) {
 						drag_info.time = 5000;
 					}
+					VMM.fireEvent(elem, "DRAGCONSTRAINT", ['right']);
 				}
 			}
 			
