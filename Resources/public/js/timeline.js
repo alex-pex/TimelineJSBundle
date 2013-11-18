@@ -7216,7 +7216,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
             VMM.Timeline.DataObj.getData(_d);
 
             // restore current slide
-            config.current_slide = _c.current_slide || previous_config.current_slide;
+            if (_c.current_slide !== undefined) {
+                config.current_slide = _c.current_slide;
+            }
+            else {
+                config.current_slide = previous_config.current_slide;
+            }
 
             // set active slide based on given config
             if (config.current_slide) {
